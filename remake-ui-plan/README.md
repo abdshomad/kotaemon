@@ -8,7 +8,7 @@ Statuses: **Complete**, **In progress**, **Not yet**.
 
 | Phase | Status |
 |-------|--------|
-| [Phase 0 — Repository and contracts](migration-phases/phases.md) | **In progress** — Next.js frontend scaffold **Complete**; backend skeleton, Docker Compose + nginx, and `custom-web-ui/README.md` env/run documentation **Not yet** |
+| [Phase 0 — Repository and contracts](migration-phases/phases.md) | **Complete** |
 | Phase 1 — Auth stub + session | **Not yet** |
 | Phase 2 — Settings read-only | **Not yet** |
 | Phase 3 — Conversations CRUD | **Not yet** |

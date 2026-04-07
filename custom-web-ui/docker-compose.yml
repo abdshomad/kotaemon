@@ -1,0 +1,39 @@
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - internal
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: custom-web-ui/frontend/Dockerfile
+    expose:
+      - "3000"
+    environment:
+      NODE_ENV: production
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: ..
+      dockerfile: custom-web-ui/backend/Dockerfile
+    expose:
+      - "8000"
+    environment:
+      KH_APP_DATA_DIR: ${KH_APP_DATA_DIR:-/app/ktem_app_data}
+      API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:${WEB_PORT:-8080}}
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge

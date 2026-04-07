@@ -6,12 +6,12 @@ Each task is labeled **Complete**, **In progress**, or **Not yet**.
 
 ## Phase 0 — Repository and contracts
 
-**Phase status:** **In progress** (frontend done; remaining items not started).
+**Phase status:** **Complete**.
 
 - **Complete** — Create **`custom-web-ui/frontend/`** — Next.js app scaffold (TypeScript, App Router, lint/format), own `package.json`.
-- **Not yet** — Create **`custom-web-ui/backend/`** — Python API skeleton (FastAPI) with `GET /api/health`, structured to import `libs/ktem` from the repo.
-- **Not yet** — Add **`custom-web-ui/docker-compose.yml`** + **`custom-web-ui/nginx/nginx.conf`**: **nginx** is the only service with **published** host ports; **frontend** and **backend** are internal-only and reached via nginx (`/` → Next, `/api` → FastAPI). See [docker-compose-nginx.md](../architecture/docker-compose-nginx.md).
-- **Not yet** — Document env vars, build contexts, and run instructions in **`custom-web-ui/README.md`** (link [system-boundaries.md](../architecture/system-boundaries.md)).
+- **Complete** — Create **`custom-web-ui/backend/`** — Python API skeleton (FastAPI) with `GET /api/health`, structured to import `libs/ktem` from the repo.
+- **Complete** — Add **`custom-web-ui/docker-compose.yml`** + **`custom-web-ui/nginx/nginx.conf`**: **nginx** is the only service with **published** host ports; **frontend** and **backend** are internal-only and reached via nginx (`/` → Next, `/api` → FastAPI). See [docker-compose-nginx.md](../architecture/docker-compose-nginx.md).
+- **Complete** — Document env vars, build contexts, and run instructions in **`custom-web-ui/README.md`** (link [system-boundaries.md](../architecture/system-boundaries.md)).
 - **Depends on:** nothing.
 - **Unlocks:** parallel frontend/backend development and production-like integration tests behind nginx.
 
