@@ -19,6 +19,7 @@ services:
       - "3000"
     environment:
       NODE_ENV: production
+      INTERNAL_API_URL: http://backend:8000
     networks:
       - internal
 
@@ -31,6 +32,7 @@ services:
     environment:
       KH_APP_DATA_DIR: ${KH_APP_DATA_DIR:-/app/ktem_app_data}
       API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:${WEB_PORT:-8080}}
+      SESSION_SECRET: ${SESSION_SECRET:-dev-insecure-change-me}
     networks:
       - internal
 

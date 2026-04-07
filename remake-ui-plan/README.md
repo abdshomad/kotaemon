@@ -9,7 +9,7 @@ Statuses: **Complete**, **In progress**, **Not yet**.
 | Phase | Status |
 |-------|--------|
 | [Phase 0 — Repository and contracts](migration-phases/phases.md) | **Complete** |
-| Phase 1 — Auth stub + session | **Not yet** |
+| [Phase 1 — Auth stub + session](migration-phases/phases.md) | **Complete** |
 | Phase 2 — Settings read-only | **Not yet** |
 | Phase 3 — Conversations CRUD | **Not yet** |
 | Phase 4 — Chat stream (MVP) | **Not yet** |

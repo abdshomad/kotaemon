@@ -17,11 +17,11 @@ Each task is labeled **Complete**, **In progress**, or **Not yet**.
 
 ## Phase 1 — Auth stub + session
 
-**Phase status:** **Not yet**.
+**Phase status:** **Complete**.
 
-- **Not yet** — API: `POST /api/auth/login` stub (or session cookie for `"default"` user when user management off).
-- **Not yet** — API: `GET /api/auth/me`.
-- **Not yet** — Next: middleware protecting `(main)` routes (redirect to `/login` when required).
+- **Complete** — API: `POST /api/auth/login` stub (or session cookie for `"default"` user when user management off).
+- **Complete** — API: `GET /api/auth/me`.
+- **Complete** — Next: middleware protecting `(main)` routes (redirect to `/login` when required).
 - **Depends on:** Phase 0.
 - **Unlocks:** realistic integration tests with credentials.
 

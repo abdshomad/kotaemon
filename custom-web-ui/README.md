@@ -7,7 +7,7 @@ This directory will hold the **replacement** for the Gradio UI: a **Next.js** fr
 ```
 custom-web-ui/
   frontend/          # Next.js (App Router, TypeScript)
-  backend/           # FastAPI API skeleton with /api/health
+  backend/           # FastAPI: /api/health, /api/auth/* (session stub)
   nginx/             # Reverse proxy config for Docker Compose
   docker-compose.yml # nginx + frontend + backend; only nginx publishes ports
   README.md          # this file
@@ -17,6 +17,13 @@ custom-web-ui/
 
 From `custom-web-ui/frontend/`: `npm install`, then `npm run dev` (Next.js dev server). `npm run build` / `npm start` for production build. `npm run lint` and `npm run format` / `npm run format:check` for ESLint and Prettier.
 
+When the API runs on a different origin (e.g. `http://127.0.0.1:8000`), create `frontend/.env.local` with:
+
+- `API_PROXY_TARGET=http://127.0.0.1:8000` — rewrites `/api/*` in Next to the backend so login and cookies stay same-origin to the dev server.
+- `INTERNAL_API_URL=http://127.0.0.1:8000` — used by **middleware** to call `GET /api/auth/me` with forwarded cookies (stronger than cookie presence alone).
+
+If `INTERNAL_API_URL` is unset, middleware only checks for the `kh_session` cookie (stub behavior).
+
 ### Backend (local dev)
 
 From `custom-web-ui/backend/`: create a virtualenv, install `requirements.txt`, then run:
@@ -25,6 +32,8 @@ From `custom-web-ui/backend/`: create a virtualenv, install `requirements.txt`, 
 
 Health check endpoint: `GET /api/health`.
 
+Auth (Phase 1): signed cookie `kh_session` via Starlette sessions — `POST /api/auth/login` (optional JSON body), `GET /api/auth/me`, `POST /api/auth/logout`. Stub accepts any credentials until full user management (Phase 7).
+
 The backend skeleton is structured for monorepo imports and adds `libs/` to `sys.path` so it can evolve to call `ktem`/`kotaemon` services directly.
 
 ## Environment variables
@@ -32,6 +41,9 @@ The backend skeleton is structured for monorepo imports and adds `libs/` to `sys
 - `WEB_PORT` (default `8080`) for nginx host port in compose.
 - `KH_APP_DATA_DIR` (default `/app/ktem_app_data`) passed into backend container.
 - `API_CORS_ORIGINS` (optional) for backend CORS allowlist when needed.
+- `SESSION_SECRET` for signing the `kh_session` cookie (defaults in compose for dev only; set in production).
+- `INTERNAL_API_URL` (frontend) — base URL for middleware to validate sessions (`http://backend:8000` in Compose).
+- `API_PROXY_TARGET` (frontend local dev) — Next.js rewrite target so `/api` hits the Python server.
 - `NEXT_PUBLIC_API_BASE_URL` for frontend local dev; use same-origin/relative `/api` in nginx topology.
 
 ## Build contexts and run instructions
