@@ -19,6 +19,11 @@ class SettingsOut(BaseModel):
     settings: dict[str, object]
 
 
+def get_flat_settings_snapshot() -> dict[str, object]:
+    """Flattened settings for indexing and chat pipelines."""
+    return _build_default_settings_snapshot()
+
+
 def _build_default_settings_snapshot() -> dict[str, object]:
     default_settings = SettingGroup(
         application=BaseSettingGroup(settings=flowsettings.SETTINGS_APP),

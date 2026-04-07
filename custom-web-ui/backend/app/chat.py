@@ -18,6 +18,8 @@ router = APIRouter(prefix="/api/chat", tags=["chat"])
 class ChatStreamBody(BaseModel):
     conversation_id: str | None = None
     message: str
+    index_id: int | None = None
+    file_ids: list[str] | None = None
 
 
 def _require_user_id(request: Request) -> str:

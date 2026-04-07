@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Iterator
 
@@ -27,11 +27,17 @@ def prepare_user_turn(
     user_id: str,
     conversation_id: str | None,
     message: str,
+    index_id: int | None = None,
+    file_ids: list[str] | None = None,
 ) -> TurnPrep:
     """Extracted submit-step logic for HTTP chat requests."""
     text = message.strip()
     if not text:
         raise ValueError("Input is empty")
+
+    selected = list(file_ids) if file_ids else []
+    if index_id is not None and selected:
+        validate_file_ids_for_turn(index_id, user_id, selected)
 
     if conversation_id:
         conversation = get_conversation(user_id, conversation_id)
