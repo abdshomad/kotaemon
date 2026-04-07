@@ -46,11 +46,11 @@ Each task is labeled **Complete**, **In progress**, or **Not yet**.
 
 ## Phase 4 — Chat stream (MVP)
 
-**Phase status:** **Not yet**.
+**Phase status:** **Complete**.
 
-- **Not yet** — Extract `prepare_user_turn` from `submit_msg` and `stream_reply` from `chat_fn` per [extraction-strategy.md](../backend-api/extraction-strategy.md).
-- **Not yet** — API: SSE endpoint emitting token/info/plot/state/done events per [gradio-to-http-mapping.md](../architecture/gradio-to-http-mapping.md).
-- **Not yet** — Next: chat page with streaming markdown + info panel shell.
+- **Complete** — Extract `prepare_user_turn` from `submit_msg` and `stream_reply` from `chat_fn` per [extraction-strategy.md](../backend-api/extraction-strategy.md).
+- **Complete** — API: SSE endpoint emitting token/info/plot/state/done events per [gradio-to-http-mapping.md](../architecture/gradio-to-http-mapping.md).
+- **Complete** — Next: chat page with streaming markdown + info panel shell.
 - **Depends on:** Phase 3.
 - **Unlocks:** core product demo without file index UI.
 

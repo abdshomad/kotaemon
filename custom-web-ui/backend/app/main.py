@@ -18,6 +18,7 @@ def _ensure_repo_libs_on_path() -> Path:
 REPO_ROOT = _ensure_repo_libs_on_path()
 
 from app.auth import router as auth_router
+from app.chat import router as chat_router
 from app.config import get_cors_origins, get_session_secret
 from app.conversations import router as conversations_router
 from app.settings import router as settings_router
@@ -46,6 +47,7 @@ if _origins:
 app.include_router(auth_router)
 app.include_router(settings_router)
 app.include_router(conversations_router)
+app.include_router(chat_router)
 
 
 @app.get("/api/health")
