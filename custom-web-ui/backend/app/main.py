@@ -7,6 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from app.auth import router as auth_router
 from app.config import get_cors_origins, get_session_secret
+from app.settings import router as settings_router
 
 
 def _ensure_repo_libs_on_path() -> Path:
@@ -42,6 +43,7 @@ if _origins:
     )
 
 app.include_router(auth_router)
+app.include_router(settings_router)
 
 
 @app.get("/api/health")

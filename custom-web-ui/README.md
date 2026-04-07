@@ -7,7 +7,7 @@ This directory will hold the **replacement** for the Gradio UI: a **Next.js** fr
 ```
 custom-web-ui/
   frontend/          # Next.js (App Router, TypeScript)
-  backend/           # FastAPI: /api/health, /api/auth/* (session stub)
+  backend/           # FastAPI: /api/health, /api/auth/*, /api/settings
   nginx/             # Reverse proxy config for Docker Compose
   docker-compose.yml # nginx + frontend + backend; only nginx publishes ports
   README.md          # this file
@@ -33,6 +33,10 @@ From `custom-web-ui/backend/`: create a virtualenv, install `requirements.txt`, 
 Health check endpoint: `GET /api/health`.
 
 Auth (Phase 1): signed cookie `kh_session` via Starlette sessions — `POST /api/auth/login` (optional JSON body), `GET /api/auth/me`, `POST /api/auth/logout`. Stub accepts any credentials until full user management (Phase 7).
+
+Settings (Phase 2): authenticated `GET /api/settings` returns a flattened settings snapshot compatible with the chat pipeline.
+
+Frontend debug page: authenticated `/settings` fetches and renders `/api/settings` JSON.
 
 The backend skeleton is structured for monorepo imports and adds `libs/` to `sys.path` so it can evolve to call `ktem`/`kotaemon` services directly.
 

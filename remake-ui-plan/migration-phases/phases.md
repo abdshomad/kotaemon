@@ -27,10 +27,10 @@ Each task is labeled **Complete**, **In progress**, or **Not yet**.
 
 ## Phase 2 — Settings read-only
 
-**Phase status:** **Not yet**.
+**Phase status:** **Complete**.
 
-- **Not yet** — API: `GET /api/settings` returning flattened settings compatible with chat pipeline.
-- **Not yet** — Next: optional debug page showing JSON (or omit UI until Phase 6).
+- **Complete** — API: `GET /api/settings` returning flattened settings compatible with chat pipeline.
+- **Complete** — Next: optional debug page showing JSON (or omit UI until Phase 6).
 - **Depends on:** Phase 1 (for authenticated request).
 - **Unlocks:** chat can send `settingsSnapshot` matching Gradio.
 
