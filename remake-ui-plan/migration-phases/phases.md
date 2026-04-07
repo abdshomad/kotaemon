@@ -36,11 +36,11 @@ Each task is labeled **Complete**, **In progress**, or **Not yet**.
 
 ## Phase 3 — Conversations CRUD (non-streaming)
 
-**Phase status:** **Not yet**.
+**Phase status:** **Complete**.
 
-- **Not yet** — Extract `services/conversations.py` from [`chat/control.py`](../../libs/ktem/ktem/pages/chat/control.py).
-- **Not yet** — API: list/create/patch/delete conversations.
-- **Not yet** — Next: sidebar list + select conversation (empty chat area OK).
+- **Complete** — Extract `services/conversations.py` from [`chat/control.py`](../../libs/ktem/ktem/pages/chat/control.py).
+- **Complete** — API: list/create/patch/delete conversations.
+- **Complete** — Next: sidebar list + select conversation (empty chat area OK).
 - **Depends on:** Phase 2.
 - **Unlocks:** conversation-scoped chat testing.
 
