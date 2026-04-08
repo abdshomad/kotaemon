@@ -7,6 +7,7 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile, status
+from ktem.index.file.index import FileIndex
 from pydantic import BaseModel
 from theflow.settings import settings as flowsettings
 
@@ -18,7 +19,6 @@ from app.services.file_index_ops import (
 )
 from app.services.ktem_index_runtime import get_file_index, get_index_manager
 from app.settings import get_flat_settings_snapshot
-from ktem.index.file.index import FileIndex
 
 router = APIRouter(prefix="/api/index", tags=["index"])
 

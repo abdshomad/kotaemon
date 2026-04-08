@@ -56,11 +56,11 @@ Each task is labeled **Complete**, **In progress**, or **Not yet**.
 
 ## Phase 5 — File index + chat integration
 
-**Phase status:** **Not yet**.
+**Phase status:** **Complete**.
 
-- **Not yet** — API: upload, list, delete for primary file index.
-- **Not yet** — Next: `/files` page + mention/autocomplete data for `@` references.
-- **Not yet** — Wire index selections into chat turn payload.
+- **Complete** — API: upload, list, delete for primary file index.
+- **Complete** — Next: `/files` page + mention/autocomplete data for `@` references.
+- **Complete** — Wire index selections into chat turn payload.
 - **Depends on:** Phase 4.
 - **Unlocks:** RAG workflows end-to-end.
 

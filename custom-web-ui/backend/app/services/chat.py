@@ -1,4 +1,4 @@
-"""Chat turn preparation and streaming helpers for Phase 4."""
+"""Chat turn preparation and streaming helpers (Phase 4–5)."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ from tzlocal import get_localzone
 from ktem.db.models import Conversation, engine
 
 from app.services.conversations import create_conversation, get_conversation
+from app.services.file_index_ops import validate_file_ids_for_turn
 
 
 @dataclass
@@ -20,6 +21,8 @@ class TurnPrep:
     user_id: str
     user_text: str
     history: list[dict[str, Any]]
+    index_id: int | None = None
+    selected_file_ids: list[str] = field(default_factory=list)
 
 
 def prepare_user_turn(
@@ -35,7 +38,10 @@ def prepare_user_turn(
     if not text:
         raise ValueError("Input is empty")
 
-    selected = list(file_ids) if file_ids else []
+    selected = [fid for fid in (file_ids or []) if fid]
+    if selected and index_id is None:
+        raise ValueError("index_id is required when file_ids is provided")
+
     if index_id is not None and selected:
         validate_file_ids_for_turn(index_id, user_id, selected)
 
@@ -59,6 +65,8 @@ def prepare_user_turn(
         user_id=user_id,
         user_text=text,
         history=history,
+        index_id=index_id,
+        selected_file_ids=selected,
     )
 
 
@@ -70,8 +78,25 @@ def stream_reply(turn: TurnPrep) -> Iterator[dict[str, Any]]:
     for token in reply.split(" "):
         yield {"type": "token", "delta": f"{token} "}
 
-    yield {"type": "info", "content": "Phase 4 MVP stream active."}
-    yield {"type": "state", "state": {"pipeline": "mvp-echo"}}
+    if turn.selected_file_ids:
+        yield {
+            "type": "info",
+            "content": (
+                f"Phase 5: {len(turn.selected_file_ids)} file(s) selected from index "
+                f"{turn.index_id}. (Retrieval wiring comes after MVP stream.)"
+            ),
+        }
+    else:
+        yield {"type": "info", "content": "MVP stream active (no index files in this turn)."}
+
+    yield {
+        "type": "state",
+        "state": {
+            "pipeline": "mvp-echo",
+            "indexId": turn.index_id,
+            "fileIds": turn.selected_file_ids,
+        },
+    }
     yield {"type": "done"}
 
 
@@ -82,6 +107,8 @@ def persist_turn(
     history: list[dict[str, Any]],
     user_text: str,
     assistant_text: str,
+    index_id: int | None = None,
+    file_ids: list[str] | None = None,
 ) -> None:
     """Persist user and assistant messages into conversation data_source."""
     with Session(engine) as session:
@@ -94,7 +121,16 @@ def persist_turn(
 
         messages = list(history)
         now_iso = datetime.now(get_localzone()).isoformat()
-        messages.append({"role": "user", "content": user_text, "created_at": now_iso})
+        user_msg: dict[str, Any] = {
+            "role": "user",
+            "content": user_text,
+            "created_at": now_iso,
+        }
+        if index_id is not None:
+            user_msg["index_id"] = index_id
+        if file_ids:
+            user_msg["file_ids"] = list(file_ids)
+        messages.append(user_msg)
         messages.append(
             {"role": "assistant", "content": assistant_text.strip(), "created_at": now_iso}
         )

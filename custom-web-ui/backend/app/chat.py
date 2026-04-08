@@ -46,6 +46,8 @@ def api_chat_stream(request: Request, body: ChatStreamBody) -> StreamingResponse
             user_id=user_id,
             conversation_id=body.conversation_id,
             message=body.message,
+            index_id=body.index_id,
+            file_ids=body.file_ids,
         )
     except ValueError as exc:
         text = str(exc)
@@ -64,6 +66,8 @@ def api_chat_stream(request: Request, body: ChatStreamBody) -> StreamingResponse
             history=turn.history,
             user_text=turn.user_text,
             assistant_text=assistant_text,
+            index_id=turn.index_id,
+            file_ids=turn.selected_file_ids,
         )
 
     return StreamingResponse(

@@ -17,6 +17,12 @@ export default function MainLayout({
             Chat
           </Link>
           <Link
+            href="/files"
+            className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+          >
+            Files
+          </Link>
+          <Link
             href="/settings"
             className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >

@@ -21,6 +21,7 @@ from app.auth import router as auth_router
 from app.chat import router as chat_router
 from app.config import get_cors_origins, get_session_secret
 from app.conversations import router as conversations_router
+from app.index_files import router as index_files_router
 from app.settings import router as settings_router
 
 app = FastAPI(title="Kotaemon custom web API", version="0.1.0")
@@ -47,6 +48,7 @@ if _origins:
 app.include_router(auth_router)
 app.include_router(settings_router)
 app.include_router(conversations_router)
+app.include_router(index_files_router)
 app.include_router(chat_router)
 
 

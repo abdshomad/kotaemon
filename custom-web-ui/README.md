@@ -7,7 +7,7 @@ This directory will hold the **replacement** for the Gradio UI: a **Next.js** fr
 ```
 custom-web-ui/
   frontend/          # Next.js (App Router, TypeScript)
-  backend/           # FastAPI: /api/health, /api/auth/*, /api/settings, /api/conversations*, /api/chat/stream
+  backend/           # FastAPI: /api/health, /api/auth/*, /api/settings, /api/index*, /api/conversations*, /api/chat/stream
   nginx/             # Reverse proxy config for Docker Compose
   docker-compose.yml # nginx + frontend + backend; only nginx publishes ports
   README.md          # this file
@@ -43,6 +43,8 @@ Conversations (Phase 3): authenticated CRUD scaffold at `GET/POST /api/conversat
 Frontend chat shell now includes a sidebar list with conversation selection and a "New" action.
 
 Chat stream (Phase 4 MVP): authenticated `POST /api/chat/stream` emits SSE events (`meta`, `token`, `info`, `state`, `done`) and persists message history into the selected conversation.
+
+File index (Phase 5): authenticated `GET /api/index`, `GET /api/index/{id}/files`, `POST /api/index/{id}/upload` (multipart), `DELETE /api/index/{id}/files/{fileId}` using ktem `FileIndex` pipelines. The chat stream accepts optional `index_id` and `file_ids` and stores them on user messages. Next.js `/files` lists and manages uploads; the chat composer supports `@` mentions against indexed files.
 
 The backend skeleton is structured for monorepo imports and adds `libs/` to `sys.path` so it can evolve to call `ktem`/`kotaemon` services directly.
 
