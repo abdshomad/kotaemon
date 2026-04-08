@@ -17,7 +17,23 @@ custom-web-ui/
 
 From `custom-web-ui/frontend/`: `npm install`, then `npm run dev` (Next.js dev server). `npm run build` / `npm start` for production build. `npm run lint` and `npm run format` / `npm run format:check` for ESLint and Prettier.
 
-When the API runs on a different origin (e.g. `http://127.0.0.1:8000`), create `frontend/.env.local` with:
+#### Ports already in use
+
+If `3000` / `8000` are taken, allocate free ports and refresh env files:
+
+```bash
+cd custom-web-ui/frontend && npm run ports:apply
+# or: bash custom-web-ui/scripts/apply-local-ports.sh
+```
+
+This writes:
+
+- `custom-web-ui/.ports.env` — `source` this in your shell for `PLAYWRIGHT_BASE_URL`, `CUSTOM_WEB_UI_*_PORT`, etc.
+- `frontend/.env.local` — `API_PROXY_TARGET` and `INTERNAL_API_URL` pointing at the chosen backend URL.
+
+Optional: `PREFERRED_FRONTEND_PORT=3100 PREFERRED_BACKEND_PORT=8100 npm run ports:apply` to start searching from other bases.
+
+When the API runs on a different origin (e.g. `http://127.0.0.1:8000`), create `frontend/.env.local` with (or use `ports:apply` above):
 
 - `API_PROXY_TARGET=http://127.0.0.1:8000` — rewrites `/api/*` in Next to the backend so login and cookies stay same-origin to the dev server.
 - `INTERNAL_API_URL=http://127.0.0.1:8000` — used by **middleware** to call `GET /api/auth/me` with forwarded cookies (stronger than cookie presence alone).
@@ -28,7 +44,7 @@ If `INTERNAL_API_URL` is unset, middleware only checks for the `kh_session` cook
 
 From `custom-web-ui/backend/`: create a virtualenv, install `requirements.txt`, then run:
 
-`uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+`uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` (or the port printed by `npm run ports:apply`; set `PYTHONPATH` / `KH_APP_DATA_DIR` / repo root per your environment — see [`scripts/README.md`](scripts/README.md))
 
 Health check endpoint: `GET /api/health`.
 

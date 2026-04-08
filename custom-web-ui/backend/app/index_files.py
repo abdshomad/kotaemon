@@ -6,7 +6,7 @@ import shutil
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile, status
+from fastapi import APIRouter, File, HTTPException, Query, Request, Response, UploadFile, status
 from ktem.index.file.index import FileIndex
 from pydantic import BaseModel
 from theflow.settings import settings as flowsettings
@@ -137,7 +137,7 @@ async def api_upload_file(
 
 
 @router.delete("/{index_id}/files/{file_id}", status_code=status.HTTP_204_NO_CONTENT)
-def api_delete_file(index_id: int, file_id: str, request: Request) -> None:
+def api_delete_file(index_id: int, file_id: str, request: Request) -> Response:
     user_id = _require_user_id(request)
     try:
         get_file_index(index_id)
@@ -146,3 +146,4 @@ def api_delete_file(index_id: int, file_id: str, request: Request) -> None:
     removed = delete_index_file(index_id, user_id, file_id)
     if not removed:
         raise HTTPException(status_code=404, detail="File not found")
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

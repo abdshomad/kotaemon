@@ -8,15 +8,19 @@ export default function MainLayout({
   return (
     <div className="flex min-h-full flex-1 flex-col">
       <header className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">Kotaemon</span>
+        <span className="text-sm font-medium text-zinc-800 dark:text-zinc-100">
+          Kotaemon
+        </span>
         <nav className="flex items-center gap-4 text-sm">
           <Link
+            data-testid="nav-chat"
             href="/"
             className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >
             Chat
           </Link>
           <Link
+            data-testid="nav-files"
             href="/files"
             className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
           >

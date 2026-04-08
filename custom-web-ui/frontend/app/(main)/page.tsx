@@ -41,7 +41,9 @@ export default function HomePage() {
   const [primaryIndexId, setPrimaryIndexId] = useState<number | null>(null);
   const [indexFiles, setIndexFiles] = useState<FileEntry[]>([]);
   const [selectedFileIds, setSelectedFileIds] = useState<string[]>([]);
-  const [mention, setMention] = useState<{ at: number; q: string } | null>(null);
+  const [mention, setMention] = useState<{ at: number; q: string } | null>(
+    null
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   async function createConversation() {
@@ -129,7 +131,7 @@ export default function HomePage() {
 
   const selected = useMemo(
     () => items.find((item) => item.id === selectedId) ?? null,
-    [items, selectedId],
+    [items, selectedId]
   );
 
   useEffect(() => {
@@ -153,7 +155,9 @@ export default function HomePage() {
           return;
         }
         setMessages(
-          Array.isArray(payload.last_messages) ? (payload.last_messages as ChatMessage[]) : [],
+          Array.isArray(payload.last_messages)
+            ? (payload.last_messages as ChatMessage[])
+            : []
         );
       })
       .catch(() => {
@@ -184,7 +188,9 @@ export default function HomePage() {
   const mentionSuggestions = useMemo(() => {
     if (!mention) return [];
     const q = mention.q;
-    return indexFiles.filter((f) => f.name.toLowerCase().includes(q)).slice(0, 8);
+    return indexFiles
+      .filter((f) => f.name.toLowerCase().includes(q))
+      .slice(0, 8);
   }, [mention, indexFiles]);
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -221,7 +227,9 @@ export default function HomePage() {
     const newInput = `${v.slice(0, at)}${v.slice(cursor)}`;
     setInput(newInput);
     setMention(null);
-    setSelectedFileIds((prev) => (prev.includes(file.id) ? prev : [...prev, file.id]));
+    setSelectedFileIds((prev) =>
+      prev.includes(file.id) ? prev : [...prev, file.id]
+    );
     requestAnimationFrame(() => el?.focus());
   }
 
@@ -251,7 +259,11 @@ export default function HomePage() {
       userMsg.file_ids = snapshotFileIds;
     }
 
-    const nextMessages = [...messages, userMsg, { role: "assistant" as const, content: "" }];
+    const nextMessages = [
+      ...messages,
+      userMsg,
+      { role: "assistant" as const, content: "" },
+    ];
     setMessages(nextMessages);
     setInput("");
     setMention(null);
@@ -282,7 +294,9 @@ export default function HomePage() {
         const chunks = buffer.split("\n\n");
         buffer = chunks.pop() ?? "";
         for (const chunk of chunks) {
-          const dataLine = chunk.split("\n").find((line) => line.startsWith("data: "));
+          const dataLine = chunk
+            .split("\n")
+            .find((line) => line.startsWith("data: "));
           if (!dataLine) continue;
           const payload = JSON.parse(dataLine.slice(6)) as {
             type?: string;
@@ -319,6 +333,7 @@ export default function HomePage() {
             Conversations
           </h1>
           <button
+            data-testid="chat-new-conversation"
             type="button"
             className="rounded bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
             onClick={() => void createConversation()}
@@ -327,7 +342,10 @@ export default function HomePage() {
           </button>
         </div>
         {error ? (
-          <p className="mb-3 text-xs text-red-600 dark:text-red-400" role="alert">
+          <p
+            className="mb-3 text-xs text-red-600 dark:text-red-400"
+            role="alert"
+          >
             {error}
           </p>
         ) : null}
@@ -351,7 +369,9 @@ export default function HomePage() {
               </li>
             ))}
             {items.length === 0 ? (
-              <li className="text-sm text-zinc-500 dark:text-zinc-400">No conversations yet.</li>
+              <li className="text-sm text-zinc-500 dark:text-zinc-400">
+                No conversations yet.
+              </li>
             ) : null}
           </ul>
         )}
@@ -362,8 +382,9 @@ export default function HomePage() {
             {selected ? selected.name : "Chat"}
           </h2>
           <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-            Type <kbd className="rounded bg-zinc-200 px-1 dark:bg-zinc-800">@</kbd> to reference indexed
-            files (Phase 5). Manage files under Files.
+            Type{" "}
+            <kbd className="rounded bg-zinc-200 px-1 dark:bg-zinc-800">@</kbd>{" "}
+            to reference indexed files (Phase 5). Manage files under Files.
           </p>
         </div>
         <div className="flex min-h-0 flex-1">
@@ -385,7 +406,8 @@ export default function HomePage() {
                   >
                     {msg.role === "user" && msg.file_ids?.length ? (
                       <p className="mb-1 text-xs opacity-80">
-                        Files: {msg.file_ids.length} id(s) from index {msg.index_id ?? "—"}
+                        Files: {msg.file_ids.length} id(s) from index{" "}
+                        {msg.index_id ?? "—"}
                       </p>
                     ) : null}
                     {msg.content || (streaming ? "Thinking..." : "")}
@@ -397,7 +419,9 @@ export default function HomePage() {
               {primaryIndexId != null && selectedFileIds.length > 0 ? (
                 <div className="mb-2 flex flex-wrap gap-1">
                   {selectedFileIds.map((fid) => {
-                    const name = indexFiles.find((f) => f.id === fid)?.name ?? fid.slice(0, 8);
+                    const name =
+                      indexFiles.find((f) => f.id === fid)?.name ??
+                      fid.slice(0, 8);
                     return (
                       <span
                         key={fid}
@@ -409,7 +433,9 @@ export default function HomePage() {
                           className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-300"
                           aria-label={`Remove ${name}`}
                           onClick={() =>
-                            setSelectedFileIds((prev) => prev.filter((id) => id !== fid))
+                            setSelectedFileIds((prev) =>
+                              prev.filter((id) => id !== fid)
+                            )
                           }
                         >
                           ×
@@ -422,6 +448,7 @@ export default function HomePage() {
               <div className="relative flex gap-2">
                 <div className="relative min-w-0 flex-1">
                   <input
+                    data-testid="chat-input"
                     ref={inputRef}
                     value={input}
                     onChange={onInputChange}
@@ -442,6 +469,8 @@ export default function HomePage() {
                       {mentionSuggestions.map((f) => (
                         <li key={f.id}>
                           <button
+                            data-testid="chat-mention-option"
+                            data-file-id={f.id}
                             type="button"
                             className="w-full px-3 py-2 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
                             onMouseDown={(ev) => {
@@ -457,6 +486,7 @@ export default function HomePage() {
                   ) : null}
                 </div>
                 <button
+                  data-testid="chat-send"
                   type="button"
                   disabled={streaming}
                   onClick={() => void sendMessage()}
@@ -471,7 +501,10 @@ export default function HomePage() {
             <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-600 dark:text-zinc-300">
               Info
             </h3>
-            <p className="mt-2 whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">
+            <p
+              data-testid="chat-info-panel"
+              className="mt-2 whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300"
+            >
               {info || "No retrieval info yet."}
             </p>
           </aside>

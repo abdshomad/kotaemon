@@ -20,22 +20,19 @@ export default function FilesPage() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
-  const loadFiles = useCallback(
-    async (id: number, q: string) => {
-      const qs = q ? `?q=${encodeURIComponent(q)}` : "";
-      const res = await fetch(`/api/index/${id}/files${qs}`, {
-        credentials: "include",
-        cache: "no-store",
-      });
-      if (!res.ok) {
-        setError(`Failed to list files (${res.status})`);
-        return;
-      }
-      const payload = (await res.json()) as FileEntry[];
-      setFiles(payload);
-    },
-    [],
-  );
+  const loadFiles = useCallback(async (id: number, q: string) => {
+    const qs = q ? `?q=${encodeURIComponent(q)}` : "";
+    const res = await fetch(`/api/index/${id}/files${qs}`, {
+      credentials: "include",
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      setError(`Failed to list files (${res.status})`);
+      return;
+    }
+    const payload = (await res.json()) as FileEntry[];
+    setFiles(payload);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -101,10 +98,13 @@ export default function FilesPage() {
     if (indexId == null) return;
     if (!window.confirm("Remove this file from the index?")) return;
     setError(null);
-    const res = await fetch(`/api/index/${indexId}/files/${encodeURIComponent(fileId)}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    const res = await fetch(
+      `/api/index/${indexId}/files/${encodeURIComponent(fileId)}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+      }
+    );
     if (!res.ok) {
       setError(`Delete failed (${res.status})`);
       return;
@@ -113,7 +113,10 @@ export default function FilesPage() {
   }
 
   return (
-    <main className="flex flex-1 flex-col gap-4 px-6 py-6">
+    <main
+      data-testid="files-page"
+      className="flex flex-1 flex-col gap-4 px-6 py-6"
+    >
       <div>
         <h1 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
           Files
@@ -142,7 +145,9 @@ export default function FilesPage() {
 
       <div className="flex flex-wrap items-end gap-4">
         <label className="flex max-w-md flex-1 flex-col gap-1 text-sm">
-          <span className="text-zinc-600 dark:text-zinc-400">Filter by name</span>
+          <span className="text-zinc-600 dark:text-zinc-400">
+            Filter by name
+          </span>
           <input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
@@ -152,7 +157,14 @@ export default function FilesPage() {
         </label>
         <label className="inline-flex cursor-pointer items-center rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200">
           {uploading ? "Uploading…" : "Upload file"}
-          <input type="file" className="sr-only" disabled={uploading || indexId == null} onChange={(e) => void onUpload(e)} />
+          <input
+            data-testid="files-upload-input"
+            type="file"
+            className="sr-only"
+            accept="application/pdf,.pdf"
+            disabled={uploading || indexId == null}
+            onChange={(e) => void onUpload(e)}
+          />
         </label>
       </div>
 
@@ -179,10 +191,22 @@ export default function FilesPage() {
             </thead>
             <tbody>
               {files.map((f) => (
-                <tr key={f.id} className="border-b border-zinc-100 dark:border-zinc-800">
-                  <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">{f.name}</td>
-                  <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400">{f.size}</td>
-                  <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400">{f.date_created}</td>
+                <tr
+                  key={f.id}
+                  data-testid="files-row"
+                  data-file-id={f.id}
+                  data-file-name={f.name}
+                  className="border-b border-zinc-100 dark:border-zinc-800"
+                >
+                  <td className="px-4 py-2 text-zinc-900 dark:text-zinc-100">
+                    {f.name}
+                  </td>
+                  <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400">
+                    {f.size}
+                  </td>
+                  <td className="px-4 py-2 text-zinc-600 dark:text-zinc-400">
+                    {f.date_created}
+                  </td>
                   <td className="px-4 py-2 text-right">
                     <button
                       type="button"
@@ -196,7 +220,10 @@ export default function FilesPage() {
               ))}
               {files.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-6 text-center text-zinc-500">
+                  <td
+                    colSpan={4}
+                    className="px-4 py-6 text-center text-zinc-500"
+                  >
                     No files yet. Upload a document to index it.
                   </td>
                 </tr>

@@ -36,6 +36,7 @@ export default function LoginPage() {
         Sign in
       </h1>
       <form
+        data-testid="login-form"
         onSubmit={onSubmit}
         className="flex w-full max-w-sm flex-col gap-4 rounded-lg border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950"
       >
@@ -65,6 +66,7 @@ export default function LoginPage() {
           </p>
         ) : null}
         <button
+          data-testid="login-submit"
           type="submit"
           className="rounded bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
         >
